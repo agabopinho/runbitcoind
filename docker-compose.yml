@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  tor:
+    image: dperson/torproxy:latest
+    ports:
+      - "9050:9050"  # Porta SOCKS5 do Tor
+    restart: unless-stopped
+    networks:
+      - bitcoin-net
+
+  bitcoind:
+    image: kylemanna/bitcoind:latest
+    ports:
+      - "8333:8333"  # Porta RPC/P2P do Bitcoin
+    volumes:
+      - D:/bitcoind:/bitcoin/.bitcoin  # Volume mapeado
+    environment:
+      - BITCOIN_ARGS=-proxy=tor:9050 -listen=1 -bind=0.0.0.0 -onlynet=onion
+    depends_on:
+      - tor
+    restart: unless-stopped
+    networks:
+      - bitcoin-net
+
+networks:
+  bitcoin-net:
+    driver: bridge
