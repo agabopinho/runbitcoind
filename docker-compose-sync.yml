@@ -1,6 +1,6 @@
 services:
   bitcoind:
-    image: kylemanna/bitcoind:latest
+    image: kylemanna/bitcoind@sha256:6f1240b4ac2006ebe0126fb1a5cdc90a14ec1c6a4b174b1abfffa84da2cf3946  # Bitcoin Core v28.1.0
     ports:
       - "8333:8333"  # Porta RPC/P2P do Bitcoin
     volumes:
