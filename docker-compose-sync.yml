@@ -5,9 +5,15 @@ services:
       - "8333:8333"  # Porta RPC/P2P do Bitcoin
     volumes:
       - D:/bitcoind:/bitcoin/.bitcoin  # Volume mapeado
-    environment:
-      # Configuração otimizada para download rápido da blockchain
-      - BITCOIN_ARGS=-listen=1 -dbcache=4096 -maxconnections=200 -maxuploadtarget=10000 -assumevalid=0 -checkblocks=0
+    command: [
+      "btc_oneshot",
+      "-rpcbind=:8332",
+      "-rpcallowip=0.0.0.0/0",
+      "-listen=1",
+      "-dbcache=4096",
+      "-maxconnections=200",
+      "-maxuploadtarget=10000"
+    ]
     restart: unless-stopped
     networks:
       - bitcoin-net

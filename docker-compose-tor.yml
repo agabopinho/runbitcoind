@@ -13,9 +13,19 @@ services:
       - "8333:8333"  # Porta RPC/P2P do Bitcoin
     volumes:
       - D:/bitcoind:/bitcoin/.bitcoin  # Volume mapeado
-    environment:
-      # Configuração para máxima privacidade através do Tor
-      - BITCOIN_ARGS=-proxy=tor:9050 -listen=1 -bind=0.0.0.0 -onlynet=onion -dnsseed=0 -addnode=3g2upl4pq6kufc4m.onion -addnode=facebookcorewwwi.onion -dbcache=1024
+    command: [
+      "btc_oneshot",
+      "-rpcbind=:8332",
+      "-rpcallowip=0.0.0.0/0",
+      "-proxy=tor:9050",
+      "-listen=1",
+      "-bind=0.0.0.0",
+      "-onlynet=onion",
+      "-dnsseed=0",
+      "-addnode=3g2upl4pq6kufc4m.onion",
+      "-addnode=facebookcorewwwi.onion",
+      "-dbcache=1024"
+    ]
     depends_on:
       - tor
     restart: unless-stopped
