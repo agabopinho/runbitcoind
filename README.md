@@ -16,24 +16,55 @@ This Docker Compose configuration creates two containers:
 
 ## Setup
 
+This project includes two configurations:
+
+### 1. Initial Blockchain Sync (Fast Download)
+Use `docker-compose-sync.yml` for the initial blockchain download:
+
 1. Clone this repository
-2. Make sure you have the directory `D:/bitcoind` created (or modify the volume path in `docker-compose.yml`)
-3. Start the services with:
+2. Make sure you have the directory `D:/bitcoind` created (or modify the volume path)
+3. Start the fast sync configuration:
+   ```bash
+   docker-compose -f docker-compose-sync.yml up -d
    ```
-   docker-compose up -d
+4. Monitor the sync progress:
+   ```bash
+   docker-compose -f docker-compose-sync.yml logs -f
    ```
-4. Check the logs with:
+
+### 2. Tor Configuration (After Sync)
+Once the blockchain is fully synced, switch to the Tor configuration for privacy:
+
+1. Stop the sync configuration:
+   ```bash
+   docker-compose -f docker-compose-sync.yml down
    ```
-   docker-compose logs -f
+2. Start the Tor configuration:
+   ```bash
+   docker-compose -f docker-compose-tor.yml up -d
+   ```
+3. Check the logs:
+   ```bash
+   docker-compose -f docker-compose-tor.yml logs -f
    ```
 
 ## Configuration
 
-The Bitcoin node is configured with the following parameters:
+### Fast Sync Configuration (`docker-compose-sync.yml`)
+Optimized for initial blockchain download:
+- Direct clearnet connections (no Tor)
+- Increased database cache (`-dbcache=4096`)
+- More connections (`-maxconnections=200`)
+- Higher upload target (`-maxuploadtarget=10000`)
+- Validation optimizations
+
+### Tor Configuration (`docker-compose-tor.yml`)
+Optimized for privacy after sync:
 - Routes all traffic through Tor (`-proxy=tor:9050`)
 - Listens for connections (`-listen=1`)
 - Binds to all interfaces (`-bind=0.0.0.0`)
 - Only connects to onion addresses (`-onlynet=onion`)
+- Includes known onion nodes for faster connection
 
 ## Accessing the Bitcoin node
 
