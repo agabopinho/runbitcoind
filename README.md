@@ -2,6 +2,8 @@
 
 This project sets up a Bitcoin Core full node using the official [`kylemanna/bitcoind`](https://hub.docker.com/r/kylemanna/bitcoind) Docker image, with configurations for both fast initial sync and privacy-focused operation through Tor.
 
+> **IMPORTANT:** It is highly recommended to fully synchronize the blockchain using the official Bitcoin Core program (https://bitcoin.org/en/bitcoin-core/) before running the docker-compose with Tor (`docker-compose-tor.yml`). Initial synchronization through Tor is extremely slow and inefficient.
+
 ## Overview
 
 This project provides two distinct Docker Compose configurations using the [`kylemanna/bitcoind`](https://github.com/kylemanna/docker-bitcoind) image:
